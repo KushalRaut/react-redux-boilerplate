@@ -1,24 +1,52 @@
-import logo from './logo.svg';
 import './App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { add, reset, sub } from './actions/countActions';
 
 function App() {
+  const dispatch = useDispatch();
+
+  const { loading, value, isError } = useSelector((state) => state.countData);
+
+  if (loading) {
+    return <h1>Loading</h1>;
+  }
+
+  if (isError) {
+    return <h1>Error</h1>;
+  }
+
+  const handleAdd = () => {
+    dispatch(add(value));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <div className="container">
+        <h1>Counter with React,Redux and Typescript</h1>
+        <p className="fs-1">{value}</p>
+        <button
+          onClick={() => {
+            handleAdd();
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          Add
+        </button>
+        <button
+          onClick={() => {
+            dispatch(sub(value));
+          }}
+        >
+          Sub
+        </button>
+        <button
+          onClick={() => {
+            dispatch(reset(value));
+          }}
+        >
+          Reset
+        </button>
+      </div>
+    </>
   );
 }
 
